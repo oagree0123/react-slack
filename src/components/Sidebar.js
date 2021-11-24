@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import SidebarOption from './SidebarOption';
-import { db } from '../firebase';
+import { db, auth } from '../firebase';
 import { useCollection } from 'react-firebase-hooks/firestore';
 
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
@@ -16,6 +16,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const SidebarContainer = styled.div`
   flex: 0.3;
@@ -72,6 +73,7 @@ const SidebarInfo = styled.div`
 
 function Sidebar() {
   const [channels, loading, error] = useCollection(db.collection('room'));
+  const [user] = useAuthState(auth);
   
   channels?.docs.map((doc) => (console.log(doc.data().name)));
 
@@ -79,10 +81,10 @@ function Sidebar() {
     <SidebarContainer>
       <SidebarHeader>
         <SidebarInfo>
-          <h2>Oagree 0123</h2>
+          <h2>{user.displayName}</h2>
           <h3>
             <FiberManualRecordIcon />
-            Oh Yes
+            {user.email}
           </h3>
         </SidebarInfo>
         <CreateIcon />
